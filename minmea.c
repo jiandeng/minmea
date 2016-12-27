@@ -12,7 +12,6 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdarg.h>
-#include <time.h>
 
 #define boolstr(s) ((s) ? "true" : "false")
 
@@ -582,30 +581,6 @@ bool minmea_parse_vtg(struct minmea_sentence_vtg *frame, const char *sentence)
     frame->faa_mode = c_faa_mode;
 
     return true;
-}
-
-int minmea_gettime(struct timespec *ts, const struct minmea_date *date, const struct minmea_time *time_)
-{
-    if (date->year == -1 || time_->hours == -1)
-        return -1;
-
-    struct tm tm;
-    memset(&tm, 0, sizeof(tm));
-    tm.tm_year = 2000 + date->year - 1900;
-    tm.tm_mon = date->month - 1;
-    tm.tm_mday = date->day;
-    tm.tm_hour = time_->hours;
-    tm.tm_min = time_->minutes;
-    tm.tm_sec = time_->seconds;
-
-    time_t timestamp = timegm(&tm); /* See README.md if your system lacks timegm(). */
-    if (timestamp != -1) {
-        ts->tv_sec = timestamp;
-        ts->tv_nsec = time_->microseconds * 1000;
-        return 0;
-    } else {
-        return -1;
-    }
 }
 
 /* vim: set ts=4 sw=4 et: */
