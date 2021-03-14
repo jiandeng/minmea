@@ -425,6 +425,17 @@ bool minmea_parse_gga(struct minmea_sentence_gga *frame, const char *sentence)
             &frame->hdop,
             &frame->altitude, &frame->altitude_units,
             &frame->height, &frame->height_units,
+            &frame->dgps_age)
+        && !minmea_scan(sentence, "tTfdfdiiffcfi_",
+            type,
+            &frame->time,
+            &frame->latitude, &latitude_direction,
+            &frame->longitude, &longitude_direction,
+            &frame->fix_quality,
+            &frame->satellites_tracked,
+            &frame->hdop,
+            &frame->altitude, &frame->altitude_units,
+            &frame->height,
             &frame->dgps_age))
         return false;
     if (strcmp(type+2, "GGA"))
